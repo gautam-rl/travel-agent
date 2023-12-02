@@ -1,53 +1,62 @@
 #!/usr/bin/env python
 
-import os
+import requests
+from bs4 import BeautifulSoup
 from dotenv import load_dotenv
-from langchain.agents import AgentType, initialize_agent, load_tools
-from langchain import hub
-from langchain.agents.format_scratchpad import format_log_to_str
-from langchain.agents.output_parsers import ReActSingleInputOutputParser
-from langchain.tools.render import render_text_description
-from langchain.llms import OpenAI
-from langchain.agents import AgentExecutor
+from langchain.agents import initialize_agent, AgentType
+from langchain.chains import LLMChain
+from langchain.chat_models import ChatOpenAI
+from langchain.prompts import PromptTemplate
+from langchain.tools import Tool, DuckDuckGoSearchResults
 
 load_dotenv()
+ddg_search = DuckDuckGoSearchResults()
+HEADERS = {
+    'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:90.0) Gecko/20100101 Firefox/90.0'
+}
 
-llm = OpenAI(temperature=0)
-# tools = load_tools(["serpapi", "llm-math"], llm=llm)
+def parse_html(content) -> str:
+    soup = BeautifulSoup(content, 'html.parser')
+    text_content_with_links = soup.get_text()
+    return text_content_with_links
 
-# TODO - we need to teach langchain to use kayak/priceline/tripadvisor API as a tool
-tools = load_tools(["llm-math"], llm=llm)
 
-if __name__ == '__main__':
-    from langchain.chat_models import ChatOpenAI
+def fetch_web_page(url: str) -> str:
+    response = requests.get(url, headers=HEADERS)
+    return parse_html(response.content)
 
-    chat_model = ChatOpenAI(temperature=0)
 
-    prompt = hub.pull("hwchase17/react-json")
-    prompt = prompt.partial(
-        tools=render_text_description(tools),
-        tool_names=", ".join([t.name for t in tools]),
-    )
+web_fetch_tool = Tool.from_function(
+    func=fetch_web_page,
+    name="WebFetcher",
+    description="Fetches the content of a web page"
+)
+prompt_template = "Summarize the following content: {content}"
+llm = ChatOpenAI(model="gpt-3.5-turbo-16k")
+#llm = ChatOpenAI(model="gpt-3.5-turbo")
+llm_chain = LLMChain(
+    llm=llm,
+    prompt=PromptTemplate.from_template(prompt_template)
+)
 
-    chat_model_with_stop = chat_model.bind(stop=["\nObservation"])
+summarize_tool = Tool.from_function(
+    func=llm_chain.run,
+    name="Summarizer",
+    description="Summarizes a web page"
+)
 
-    from langchain.agents.output_parsers import ReActJsonSingleInputOutputParser
+#tools = [ddg_search, web_fetch_tool, summarize_tool]
+tools = [ddg_search, summarize_tool]
 
-    agent = (
-            {
-                "input": lambda x: x["input"],
-                "agent_scratchpad": lambda x: format_log_to_str(x["intermediate_steps"]),
-            }
-            | prompt
-            | chat_model_with_stop
-            | ReActJsonSingleInputOutputParser()
-    )
+agent = initialize_agent(
+    tools=tools,
+    agent_type=AgentType.ZERO_SHOT_REACT_DESCRIPTION,
+    llm=llm,
+    verbose=True,
+    handle_parsing_errors=True,
+)
 
-    agent_executor = AgentExecutor(agent=agent, tools=tools, verbose=True)
+#prompt = "Research how to use the requests library in Python. Use your tools to search and summarize content into a guide on how to use the requests library."
+prompt = "I want to travel somewhere warm in January for 1 week. My home airport is SFO. Do research on my behalf and present me with 3 detailed itineraries that are self contained." # Use your tools to search and summarize content into a guide on how to use the requests library."
 
-    agent_executor.invoke(
-        {
-            "input": "Who is Leo DiCaprio's girlfriend? What is her current age raised to the 0.43 power?"
-        }
-    )
-    print("Hello world")
+print(agent.run(prompt))
