@@ -4,4 +4,4 @@ import runloop
 
 @runloop.loop
 def echo(metadata: dict[str, str], greeting: list[str]) -> tuple[list[str], dict[str, str]]:
-    return [f"Hellooo Runloop!!!!! {greeting[0]}"], metadata
+    return [f"Hello Runloop! {greeting[0]}"], metadata
