@@ -3,3 +3,5 @@ python-dotenv
 langchain
 requests
 runloop
+opentelemetry-instrumentation-grpc
+opentelemetry-instrumentation-fastapi
