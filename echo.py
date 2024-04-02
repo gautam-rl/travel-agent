@@ -3,5 +3,5 @@
 import runloop
 
 @runloop.function
-def func_multi_arg_echo(name: str) -> str:
+def hello(name: str) -> str:
     return f"Hello {name}!"
