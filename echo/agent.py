@@ -10,8 +10,48 @@ from langchain.tools import Tool, DuckDuckGoSearchResults
 import runloop
 from langchain_openai import ChatOpenAI
 
+class Agent:
+    """
+    Sets up a langchain using a travel planner agent, that has access to a search tool and a summarizer tool.
+    """
+    _agent : AgentExecutor = None
+
+    def __init__(self):
+        # DuckDuckGo search tool
+        ddg_search = DuckDuckGoSearchResults()
+
+        # Summarizer tool
+        summarize_template = "Summarize the following content: {content}"
+        llm = ChatOpenAI(model="gpt-3.5-turbo-16k")
+        #llm = ChatOpenAI(model="gpt-3.5-turbo")
+        llm_chain = LLMChain(
+            llm=llm,
+            prompt=PromptTemplate.from_template(summarize_template)
+        )
+        summarize_tool = Tool.from_function(
+            func=llm_chain.run,
+            name="Summarizer",
+            description="Summarizes a web page"
+        )
+
+        #tools = [ddg_search, web_fetch_tool, summarize_tool]
+        tools = [ddg_search, summarize_tool]
+
+        self._agent = initialize_agent(
+            tools=tools,
+            agent_type=AgentType.ZERO_SHOT_REACT_DESCRIPTION,
+            llm=llm,
+            verbose=True,
+            handle_parsing_errors=True,
+        )
+
+    def run(self, prompt: str) -> str:
+        return self._agent.run(prompt)
+
+
 load_dotenv()
-ddg_search = DuckDuckGoSearchResults()
+agent = Agent()
+
 HEADERS = {
     'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:90.0) Gecko/20100101 Firefox/90.0'
 }
@@ -37,41 +77,6 @@ web_fetch_tool = Tool.from_function(
 @runloop.function
 def plan_trip(prompt: str) -> str:
     return agent.run(prompt)
-
-class Agent:
-    """
-    Sets up a langchain using a travel planner agent, that has access to a search tool and a summarizer tool.
-    """
-    def __init__(self):
-        summarize_template = "Summarize the following content: {content}"
-        llm = ChatOpenAI(model="gpt-3.5-turbo-16k")
-        #llm = ChatOpenAI(model="gpt-3.5-turbo")
-        llm_chain = LLMChain(
-            llm=llm,
-            prompt=PromptTemplate.from_template(summarize_template)
-        )
-
-        summarize_tool = Tool.from_function(
-            func=llm_chain.run,
-            name="Summarizer",
-            description="Summarizes a web page"
-        )
-
-        #tools = [ddg_search, web_fetch_tool, summarize_tool]
-        tools = [ddg_search, summarize_tool]
-
-        self.agent = initialize_agent(
-            tools=tools,
-            agent_type=AgentType.ZERO_SHOT_REACT_DESCRIPTION,
-            llm=llm,
-            verbose=True,
-            handle_parsing_errors=True,
-        )
-
-    def run(self, prompt):
-        return agent.run(prompt)
-
-agent = Agent()
 
 if __name__ == '__main__':
     # Just run an example

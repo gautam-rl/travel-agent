@@ -16,42 +16,36 @@ anyio==4.3.0
     # via
     #   httpx
     #   openai
-asgiref==3.8.1
-    # via
-    #   opentelemetry-instrumentation-asgi
-    #   opentelemetry-test-utils
 attrs==23.2.0
     # via aiohttp
 beautifulsoup4==4.12.3
     # via -r requirements.in
 certifi==2024.2.2
     # via
+    #   curl-cffi
     #   httpcore
     #   httpx
     #   requests
+cffi==1.16.0
+    # via curl-cffi
 charset-normalizer==3.3.2
     # via requests
+click==8.1.7
+    # via duckduckgo-search
+curl-cffi==0.6.2
+    # via duckduckgo-search
 dataclasses-json==0.6.4
     # via
     #   langchain
     #   langchain-community
-deprecated==1.2.14
-    # via
-    #   opentelemetry-api
-    #   opentelemetry-exporter-otlp-proto-grpc
-    #   opentelemetry-exporter-otlp-proto-http
 distro==1.9.0
     # via openai
+duckduckgo-search==5.2.2
+    # via -r requirements.in
 frozenlist==1.4.1
     # via
     #   aiohttp
     #   aiosignal
-googleapis-common-protos==1.63.0
-    # via
-    #   opentelemetry-exporter-otlp-proto-grpc
-    #   opentelemetry-exporter-otlp-proto-http
-grpcio==1.62.1
-    # via opentelemetry-exporter-otlp-proto-grpc
 h11==0.14.0
     # via httpcore
 httpcore==1.0.5
@@ -64,8 +58,6 @@ idna==3.6
     #   httpx
     #   requests
     #   yarl
-importlib-metadata==7.0.0
-    # via opentelemetry-api
 jsonpatch==1.33
     # via
     #   langchain
@@ -75,7 +67,9 @@ jsonpointer==2.4
 langchain==0.1.14
     # via -r requirements.in
 langchain-community==0.0.31
-    # via langchain
+    # via
+    #   -r requirements.in
+    #   langchain
 langchain-core==0.1.39
     # via
     #   langchain
@@ -105,144 +99,16 @@ numpy==1.26.4
     #   langchain-community
 openai==1.16.1
     # via langchain-openai
-opentelemetry-api==1.24.0
-    # via
-    #   -r requirements.in
-    #   opentelemetry-exporter-otlp-proto-grpc
-    #   opentelemetry-exporter-otlp-proto-http
-    #   opentelemetry-instrumentation
-    #   opentelemetry-instrumentation-aiohttp-client
-    #   opentelemetry-instrumentation-asgi
-    #   opentelemetry-instrumentation-asyncio
-    #   opentelemetry-instrumentation-dbapi
-    #   opentelemetry-instrumentation-fastapi
-    #   opentelemetry-instrumentation-grpc
-    #   opentelemetry-instrumentation-logging
-    #   opentelemetry-instrumentation-requests
-    #   opentelemetry-instrumentation-sqlalchemy
-    #   opentelemetry-instrumentation-sqlite3
-    #   opentelemetry-instrumentation-tortoiseorm
-    #   opentelemetry-instrumentation-urllib
-    #   opentelemetry-instrumentation-urllib3
-    #   opentelemetry-instrumentation-wsgi
-    #   opentelemetry-propagator-aws-xray
-    #   opentelemetry-sdk
-    #   opentelemetry-test-utils
-opentelemetry-exporter-otlp==1.24.0
-    # via -r requirements.in
-opentelemetry-exporter-otlp-proto-common==1.24.0
-    # via
-    #   opentelemetry-exporter-otlp-proto-grpc
-    #   opentelemetry-exporter-otlp-proto-http
-opentelemetry-exporter-otlp-proto-grpc==1.24.0
-    # via
-    #   -r requirements.in
-    #   opentelemetry-exporter-otlp
-opentelemetry-exporter-otlp-proto-http==1.24.0
-    # via opentelemetry-exporter-otlp
-opentelemetry-instrumentation==0.45b0
-    # via
-    #   opentelemetry-instrumentation-aiohttp-client
-    #   opentelemetry-instrumentation-asgi
-    #   opentelemetry-instrumentation-asyncio
-    #   opentelemetry-instrumentation-aws-lambda
-    #   opentelemetry-instrumentation-dbapi
-    #   opentelemetry-instrumentation-fastapi
-    #   opentelemetry-instrumentation-grpc
-    #   opentelemetry-instrumentation-logging
-    #   opentelemetry-instrumentation-requests
-    #   opentelemetry-instrumentation-sqlalchemy
-    #   opentelemetry-instrumentation-sqlite3
-    #   opentelemetry-instrumentation-tortoiseorm
-    #   opentelemetry-instrumentation-urllib
-    #   opentelemetry-instrumentation-urllib3
-    #   opentelemetry-instrumentation-wsgi
-opentelemetry-instrumentation-aiohttp-client==0.45b0
-    # via -r requirements.in
-opentelemetry-instrumentation-asgi==0.45b0
-    # via
-    #   -r requirements.in
-    #   opentelemetry-instrumentation-fastapi
-opentelemetry-instrumentation-asyncio==0.45b0
-    # via -r requirements.in
-opentelemetry-instrumentation-aws-lambda==0.45b0
-    # via -r requirements.in
-opentelemetry-instrumentation-dbapi==0.45b0
-    # via
-    #   -r requirements.in
-    #   opentelemetry-instrumentation-sqlite3
-opentelemetry-instrumentation-fastapi==0.45b0
-    # via -r requirements.in
-opentelemetry-instrumentation-grpc==0.45b0
-    # via -r requirements.in
-opentelemetry-instrumentation-logging==0.45b0
-    # via -r requirements.in
-opentelemetry-instrumentation-requests==0.45b0
-    # via -r requirements.in
-opentelemetry-instrumentation-sqlalchemy==0.45b0
-    # via -r requirements.in
-opentelemetry-instrumentation-sqlite3==0.45b0
-    # via -r requirements.in
-opentelemetry-instrumentation-tortoiseorm==0.45b0
-    # via -r requirements.in
-opentelemetry-instrumentation-urllib==0.45b0
-    # via -r requirements.in
-opentelemetry-instrumentation-urllib3==0.45b0
-    # via -r requirements.in
-opentelemetry-instrumentation-wsgi==0.45b0
-    # via -r requirements.in
-opentelemetry-propagator-aws-xray==1.0.1
-    # via opentelemetry-instrumentation-aws-lambda
-opentelemetry-proto==1.24.0
-    # via
-    #   opentelemetry-exporter-otlp-proto-common
-    #   opentelemetry-exporter-otlp-proto-grpc
-    #   opentelemetry-exporter-otlp-proto-http
-opentelemetry-sdk==1.24.0
-    # via
-    #   -r requirements.in
-    #   opentelemetry-exporter-otlp-proto-grpc
-    #   opentelemetry-exporter-otlp-proto-http
-    #   opentelemetry-instrumentation-grpc
-    #   opentelemetry-test-utils
-opentelemetry-semantic-conventions==0.45b0
-    # via
-    #   opentelemetry-instrumentation-aiohttp-client
-    #   opentelemetry-instrumentation-asgi
-    #   opentelemetry-instrumentation-asyncio
-    #   opentelemetry-instrumentation-aws-lambda
-    #   opentelemetry-instrumentation-dbapi
-    #   opentelemetry-instrumentation-fastapi
-    #   opentelemetry-instrumentation-grpc
-    #   opentelemetry-instrumentation-requests
-    #   opentelemetry-instrumentation-sqlalchemy
-    #   opentelemetry-instrumentation-tortoiseorm
-    #   opentelemetry-instrumentation-urllib
-    #   opentelemetry-instrumentation-urllib3
-    #   opentelemetry-instrumentation-wsgi
-    #   opentelemetry-sdk
-opentelemetry-test-utils==0.45b0
-    # via opentelemetry-instrumentation-asyncio
-opentelemetry-util-http==0.45b0
-    # via
-    #   opentelemetry-instrumentation-aiohttp-client
-    #   opentelemetry-instrumentation-asgi
-    #   opentelemetry-instrumentation-fastapi
-    #   opentelemetry-instrumentation-requests
-    #   opentelemetry-instrumentation-urllib
-    #   opentelemetry-instrumentation-urllib3
-    #   opentelemetry-instrumentation-wsgi
 orjson==3.10.0
-    # via langsmith
+    # via
+    #   duckduckgo-search
+    #   langsmith
 packaging==23.2
     # via
     #   langchain-core
     #   marshmallow
-    #   opentelemetry-instrumentation-sqlalchemy
-protobuf==4.25.3
-    # via
-    #   googleapis-common-protos
-    #   opentelemetry-proto
+pycparser==2.22
+    # via cffi
 pydantic==2.6.1
     # via
     #   langchain
@@ -269,7 +135,6 @@ requests==2.31.0
     #   langchain
     #   langchain-community
     #   langsmith
-    #   opentelemetry-exporter-otlp-proto-http
     #   tiktoken
 runloop==0.0.19
     # via -r requirements.in
@@ -296,7 +161,6 @@ tqdm==4.66.2
 typing-extensions==4.10.0
     # via
     #   openai
-    #   opentelemetry-sdk
     #   pydantic
     #   pydantic-core
     #   sqlalchemy
@@ -305,20 +169,5 @@ typing-inspect==0.9.0
     # via dataclasses-json
 urllib3==2.2.1
     # via requests
-wrapt==1.16.0
-    # via
-    #   deprecated
-    #   opentelemetry-instrumentation
-    #   opentelemetry-instrumentation-aiohttp-client
-    #   opentelemetry-instrumentation-asyncio
-    #   opentelemetry-instrumentation-dbapi
-    #   opentelemetry-instrumentation-grpc
-    #   opentelemetry-instrumentation-sqlalchemy
-    #   opentelemetry-instrumentation-urllib3
 yarl==1.9.4
     # via aiohttp
-zipp==3.18.1
-    # via importlib-metadata
-
-# The following packages are considered to be unsafe in a requirements file:
-# setuptools
