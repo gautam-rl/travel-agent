@@ -5,9 +5,10 @@ from bs4 import BeautifulSoup
 from dotenv import load_dotenv
 from langchain.agents import initialize_agent, AgentType
 from langchain.chains import LLMChain
-from langchain.chat_models import ChatOpenAI
 from langchain.prompts import PromptTemplate
 from langchain.tools import Tool, DuckDuckGoSearchResults
+import runloop
+from langchain_openai import ChatOpenAI
 
 load_dotenv()
 ddg_search = DuckDuckGoSearchResults()
@@ -21,6 +22,7 @@ def parse_html(content) -> str:
     return text_content_with_links
 
 
+@runloop.function
 def fetch_web_page(url: str) -> str:
     response = requests.get(url, headers=HEADERS)
     return parse_html(response.content)
@@ -31,32 +33,47 @@ web_fetch_tool = Tool.from_function(
     name="WebFetcher",
     description="Fetches the content of a web page"
 )
-prompt_template = "Summarize the following content: {content}"
-llm = ChatOpenAI(model="gpt-3.5-turbo-16k")
-#llm = ChatOpenAI(model="gpt-3.5-turbo")
-llm_chain = LLMChain(
-    llm=llm,
-    prompt=PromptTemplate.from_template(prompt_template)
-)
 
-summarize_tool = Tool.from_function(
-    func=llm_chain.run,
-    name="Summarizer",
-    description="Summarizes a web page"
-)
+@runloop.function
+def plan_trip(prompt: str) -> str:
+    return agent.run(prompt)
 
-#tools = [ddg_search, web_fetch_tool, summarize_tool]
-tools = [ddg_search, summarize_tool]
+class Agent:
+    """
+    Sets up a langchain using a travel planner agent, that has access to a search tool and a summarizer tool.
+    """
+    def __init__(self):
+        summarize_template = "Summarize the following content: {content}"
+        llm = ChatOpenAI(model="gpt-3.5-turbo-16k")
+        #llm = ChatOpenAI(model="gpt-3.5-turbo")
+        llm_chain = LLMChain(
+            llm=llm,
+            prompt=PromptTemplate.from_template(summarize_template)
+        )
 
-agent = initialize_agent(
-    tools=tools,
-    agent_type=AgentType.ZERO_SHOT_REACT_DESCRIPTION,
-    llm=llm,
-    verbose=True,
-    handle_parsing_errors=True,
-)
+        summarize_tool = Tool.from_function(
+            func=llm_chain.run,
+            name="Summarizer",
+            description="Summarizes a web page"
+        )
 
-#prompt = "Research how to use the requests library in Python. Use your tools to search and summarize content into a guide on how to use the requests library."
-prompt = "I want to travel somewhere warm in January for 1 week. My home airport is SFO. Do research on my behalf and present me with 3 detailed itineraries that are self contained." # Use your tools to search and summarize content into a guide on how to use the requests library."
+        #tools = [ddg_search, web_fetch_tool, summarize_tool]
+        tools = [ddg_search, summarize_tool]
 
-print(agent.run(prompt))
+        self.agent = initialize_agent(
+            tools=tools,
+            agent_type=AgentType.ZERO_SHOT_REACT_DESCRIPTION,
+            llm=llm,
+            verbose=True,
+            handle_parsing_errors=True,
+        )
+
+    def run(self, prompt):
+        return agent.run(prompt)
+
+agent = Agent()
+
+if __name__ == '__main__':
+    # Just run an example
+    prompt = "I want to travel somewhere warm in January for 1 week. My home airport is SFO. Do research on my behalf and present me with 3 detailed itineraries that are self contained." # Use your tools to search and summarize content into a guide on how to use the requests library."
+    print(agent.run(prompt))
