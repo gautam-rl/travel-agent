@@ -46,8 +46,8 @@ class Agent:
 
         # Create a REACT agent with access to tools.
         #tools = [ddg_search, web_fetch_tool, summarize_tool]
-        #tools = [ddg_search, summarize_tool]
-        tools = [summarize_tool]
+        tools = [ddg_search, summarize_tool]
+        #tools = [summarize_tool]
 
         # TODO - structure the prompt
         prompt = PromptTemplate.from_template(
@@ -61,7 +61,7 @@ class Agent:
             Question: the input question you must answer
             Thought: you should always think about what to do
             Action: the action to take, should be one of [{tool_names}]
-            Action Input: the input to the action
+            Action Input: the input to the action, e.g. the search query
             Observation: the result of the action
             ... (this Thought/Action/Action Input/Observation can repeat N times)
             Thought: I now know the final answer
