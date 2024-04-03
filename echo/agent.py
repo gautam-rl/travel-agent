@@ -93,8 +93,12 @@ def parse_html(content) -> str:
     return text_content_with_links
 
 
-@runloop.function
+# TODO - this breaks langchain
+#@runloop.function
 def fetch_web_page(url: str) -> str:
+    # Check if valid url
+    if not url.startswith("http"):
+        return "Invalid URL"
     response = requests.get(url, headers=HEADERS)
     return parse_html(response.content)
 
