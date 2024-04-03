@@ -18,8 +18,9 @@ from langchain.chains import LLMChain
 from langchain_core.prompts import PromptTemplate
 from langchain_openai import OpenAI
 from loguru import logger
+from os import getpid
 
-logfile = "/tmp/output.log"
+logfile = f"/tmp/output-{getpid()}.log"
 
 logger.add(logfile, colorize=True, enqueue=True)
 log_handler = FileCallbackHandler(logfile)
