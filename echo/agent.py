@@ -22,7 +22,7 @@ from loguru import logger
 logfile = "/tmp/output.log"
 
 logger.add(logfile, colorize=True, enqueue=True)
-handler = FileCallbackHandler(logfile)
+log_handler = FileCallbackHandler(logfile)
 
 
 class Agent:
@@ -90,7 +90,7 @@ class Agent:
             prompt=prompt,
         )
 
-        self._agent_executor = AgentExecutor(agent=agent, tools=tools, verbose=True, handle_parsing_errors=True, callbacks=[logger]) # type: ignore
+        self._agent_executor = AgentExecutor(agent=agent, tools=tools, verbose=True, handle_parsing_errors=True, callbacks=[log_handler]) # type: ignore
 
     def run(self, prompt: str) -> Dict[str, Any]:
         return self._agent_executor.invoke({"input": prompt})
