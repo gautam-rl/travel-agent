@@ -38,9 +38,16 @@ class Agent:
             description="Summarizes a web page"
         )
 
+        # Web fetch tool
+        web_fetch_tool = Tool.from_function(
+            func=fetch_web_page,
+            name="WebFetcher",
+            description="Fetches the content of a web page"
+        )
+
         # Create a REACT agent with access to tools.
-        #tools = [ddg_search, web_fetch_tool, summarize_tool]
-        tools = [ddg_search, summarize_tool]
+        tools = [ddg_search, web_fetch_tool, summarize_tool]
+        #tools = [ddg_search, summarize_tool]
 
         # TODO - structure the prompt
         prompt = PromptTemplate.from_template(
@@ -96,19 +103,13 @@ def fetch_web_page(url: str) -> str:
     return parse_html(response.content)
 
 
-web_fetch_tool = Tool.from_function(
-    func=fetch_web_page,
-    name="WebFetcher",
-    description="Fetches the content of a web page"
-)
-
 @runloop.function
 def plan_trip(prompt: str) -> str:
-    result: str
+    result: Dict[str, Any]
     with get_openai_callback() as cb:
         result = agent.run(prompt)
         print(f"OpenAI Usage:\n{cb}")
-    return result
+    return result["output"]
 
 
 if __name__ == '__main__':
