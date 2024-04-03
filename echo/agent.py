@@ -13,6 +13,18 @@ from langchain_community.callbacks import get_openai_callback
 from langchain_openai import ChatOpenAI
 import runloop
 
+from langchain.callbacks import FileCallbackHandler
+from langchain.chains import LLMChain
+from langchain_core.prompts import PromptTemplate
+from langchain_openai import OpenAI
+from loguru import logger
+
+logfile = "/tmp/output.log"
+
+logger.add(logfile, colorize=True, enqueue=True)
+handler = FileCallbackHandler(logfile)
+
+
 class Agent:
     """
     Sets up a langchain using a travel planner agent, that has access to a search tool and a summarizer tool.
@@ -78,7 +90,7 @@ class Agent:
             prompt=prompt,
         )
 
-        self._agent_executor = AgentExecutor(agent=agent, tools=tools, verbose=True, handle_parsing_errors=True) # type: ignore
+        self._agent_executor = AgentExecutor(agent=agent, tools=tools, verbose=True, handle_parsing_errors=True, callbacks=[logger]) # type: ignore
 
     def run(self, prompt: str) -> Dict[str, Any]:
         return self._agent_executor.invoke({"input": prompt})
