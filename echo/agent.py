@@ -1,20 +1,24 @@
 #!/usr/bin/env python
 
+from typing import Any, Dict
 import requests
 from bs4 import BeautifulSoup
 from dotenv import load_dotenv
-from langchain.agents import initialize_agent, AgentType
+from langchain.agents import create_react_agent, AgentExecutor, AgentType
 from langchain.chains import LLMChain
+from langchain_core.runnables import Runnable
 from langchain.prompts import PromptTemplate
-from langchain.tools import Tool, DuckDuckGoSearchResults
-import runloop
+from langchain.tools import Tool
+from langchain_community.tools import DuckDuckGoSearchResults
+from langchain_community.callbacks import get_openai_callback
 from langchain_openai import ChatOpenAI
+import runloop
 
 class Agent:
     """
     Sets up a langchain using a travel planner agent, that has access to a search tool and a summarizer tool.
     """
-    _agent : AgentExecutor = None
+    _agent_executor : AgentExecutor
 
     def __init__(self):
         # DuckDuckGo search tool
@@ -34,19 +38,43 @@ class Agent:
             description="Summarizes a web page"
         )
 
+        # Create a REACT agent with access to tools.
         #tools = [ddg_search, web_fetch_tool, summarize_tool]
         tools = [ddg_search, summarize_tool]
 
-        self._agent = initialize_agent(
-            tools=tools,
-            agent_type=AgentType.ZERO_SHOT_REACT_DESCRIPTION,
+        # TODO - structure the prompt
+        prompt = PromptTemplate.from_template(
+            """
+            Answer the following questions as best you can. You have access to the following tools:
+
+            {tools}
+
+            Use the following format:
+
+            Question: the input question you must answer
+            Thought: you should always think about what to do
+            Action: the action to take, should be one of [{tool_names}]
+            Action Input: the input to the action
+            Observation: the result of the action
+            ... (this Thought/Action/Action Input/Observation can repeat N times)
+            Thought: I now know the final answer
+            Final Answer: the final answer to the original input question
+
+            Begin!
+
+            Question: {input}
+            Thought:{agent_scratchpad}
+            """)
+        agent = create_react_agent(
             llm=llm,
-            verbose=True,
-            handle_parsing_errors=True,
+            tools=tools,
+            prompt=prompt,
         )
 
-    def run(self, prompt: str) -> str:
-        return self._agent.run(prompt)
+        self._agent_executor = AgentExecutor(agent=agent, tools=tools, verbose=True, handle_parsing_errors=True) # type: ignore
+
+    def run(self, prompt: str) -> Dict[str, Any]:
+        return self._agent_executor.invoke({"input": prompt})
 
 
 load_dotenv()
@@ -76,9 +104,15 @@ web_fetch_tool = Tool.from_function(
 
 @runloop.function
 def plan_trip(prompt: str) -> str:
-    return agent.run(prompt)
+    result: str
+    with get_openai_callback() as cb:
+        result = agent.run(prompt)
+        print(f"OpenAI Usage:\n{cb}")
+    return result
+
 
 if __name__ == '__main__':
     # Just run an example
-    prompt = "I want to travel somewhere warm in January for 1 week. My home airport is SFO. Do research on my behalf and present me with 3 detailed itineraries that are self contained." # Use your tools to search and summarize content into a guide on how to use the requests library."
+    prompt = "I want to travel somewhere warm in January for 1 week. My home airport is SFO. Do research on my behalf and present me with 3 detailed itineraries that are self contained."
+    # Use your tools to search and summarize content into a guide on how to use the requests library."
     print(agent.run(prompt))
