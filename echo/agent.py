@@ -45,8 +45,9 @@ class Agent:
         )
 
         # Create a REACT agent with access to tools.
-        tools = [ddg_search, web_fetch_tool, summarize_tool]
+        #tools = [ddg_search, web_fetch_tool, summarize_tool]
         #tools = [ddg_search, summarize_tool]
+        tools = [summarize_tool]
 
         # TODO - structure the prompt
         prompt = PromptTemplate.from_template(
