@@ -1,6 +1,7 @@
 beautifulsoup4
 python-dotenv
 langchain
+langchain-openai
 requests
 runloop
 opentelemetry-api
