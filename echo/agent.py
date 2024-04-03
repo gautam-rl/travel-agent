@@ -4,9 +4,8 @@ from typing import Any, Dict
 import requests
 from bs4 import BeautifulSoup
 from dotenv import load_dotenv
-from langchain.agents import create_react_agent, AgentExecutor, AgentType
+from langchain.agents import create_react_agent, AgentExecutor
 from langchain.chains import LLMChain
-from langchain_core.runnables import Runnable
 from langchain.prompts import PromptTemplate
 from langchain.tools import Tool
 from langchain_community.tools import DuckDuckGoSearchResults
@@ -84,9 +83,6 @@ class Agent:
         return self._agent_executor.invoke({"input": prompt})
 
 
-load_dotenv()
-agent = Agent()
-
 HEADERS = {
     'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:90.0) Gecko/20100101 Firefox/90.0'
 }
@@ -110,6 +106,10 @@ def plan_trip(prompt: str) -> str:
         result = agent.run(prompt)
         print(f"OpenAI Usage:\n{cb}")
     return result["output"]
+
+
+load_dotenv()
+agent = Agent()
 
 
 if __name__ == '__main__':
