@@ -40,7 +40,7 @@ dataclasses-json==0.6.4
     #   langchain-community
 distro==1.9.0
     # via openai
-duckduckgo-search==5.2.2
+duckduckgo-search==5.3.0
     # via -r requirements.in
 frozenlist==1.4.1
     # via
@@ -70,7 +70,7 @@ langchain-community==0.0.31
     # via
     #   -r requirements.in
     #   langchain
-langchain-core==0.1.39
+langchain-core==0.1.40
     # via
     #   langchain
     #   langchain-community
@@ -80,7 +80,7 @@ langchain-openai==0.1.1
     # via -r requirements.in
 langchain-text-splitters==0.0.1
     # via langchain
-langsmith==0.1.39
+langsmith==0.1.40
     # via
     #   langchain
     #   langchain-community
@@ -99,7 +99,7 @@ numpy==1.26.4
     # via
     #   langchain
     #   langchain-community
-openai==1.16.1
+openai==1.16.2
     # via langchain-openai
 orjson==3.10.0
     # via
@@ -160,7 +160,7 @@ tiktoken==0.6.0
     # via langchain-openai
 tqdm==4.66.2
     # via openai
-typing-extensions==4.10.0
+typing-extensions==4.11.0
     # via
     #   openai
     #   pydantic
