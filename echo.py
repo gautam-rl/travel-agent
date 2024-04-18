@@ -16,7 +16,7 @@ class WaitForHumanApproval(BaseModel):
 @runloop.function
 def wait_for_approval(scheduler: runloop.Scheduler) -> WaitForHumanApproval:
     awaitable_latch = scheduler.create_latch(
-        "my_latch", ApiFulfillment(type=WaitForHumanApproval)
+        "my_latch", runloop.ApiFulfillment(type=WaitForHumanApproval)
     )
 
     latch_fulfillment = awaitable_latch.await_result()
