@@ -20,4 +20,5 @@ def wait_for_approval(scheduler: runloop.Scheduler) -> WaitForHumanApproval:
     )
 
     latch_fulfillment = awaitable_latch.await_result()
+    print(f"Result: {latch_fulfillment}")
     return latch_fulfillment.result
