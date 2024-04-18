@@ -4,172 +4,17 @@
 #
 #    pip-compile
 #
-aiohttp==3.9.5
-    # via
-    #   langchain
-    #   langchain-community
-aiosignal==1.3.1
-    # via aiohttp
 annotated-types==0.6.0
     # via pydantic
-anyio==4.3.0
-    # via
-    #   httpx
-    #   openai
-attrs==23.2.0
-    # via aiohttp
-beautifulsoup4==4.12.3
-    # via -r requirements.in
-certifi==2024.2.2
-    # via
-    #   curl-cffi
-    #   httpcore
-    #   httpx
-    #   requests
-cffi==1.16.0
-    # via curl-cffi
-charset-normalizer==3.3.2
-    # via requests
-click==8.1.7
-    # via duckduckgo-search
-curl-cffi==0.6.2
-    # via duckduckgo-search
-dataclasses-json==0.6.4
-    # via
-    #   langchain
-    #   langchain-community
-distro==1.9.0
-    # via openai
-duckduckgo-search==5.3.0
-    # via -r requirements.in
-frozenlist==1.4.1
-    # via
-    #   aiohttp
-    #   aiosignal
-h11==0.14.0
-    # via httpcore
-httpcore==1.0.5
-    # via httpx
-httpx==0.27.0
-    # via openai
-idna==3.7
-    # via
-    #   anyio
-    #   httpx
-    #   requests
-    #   yarl
-jsonpatch==1.33
-    # via
-    #   langchain
-    #   langchain-core
-jsonpointer==2.4
-    # via jsonpatch
-langchain==0.1.16
-    # via -r requirements.in
-langchain-community==0.0.33
-    # via
-    #   -r requirements.in
-    #   langchain
-langchain-core==0.1.43
-    # via
-    #   langchain
-    #   langchain-community
-    #   langchain-openai
-    #   langchain-text-splitters
-langchain-openai==0.1.3
-    # via -r requirements.in
-langchain-text-splitters==0.0.1
-    # via langchain
-langsmith==0.1.48
-    # via
-    #   langchain
-    #   langchain-community
-    #   langchain-core
-loguru==0.7.2
-    # via -r requirements.in
-marshmallow==3.21.1
-    # via dataclasses-json
-multidict==6.0.5
-    # via
-    #   aiohttp
-    #   yarl
-mypy-extensions==1.0.0
-    # via typing-inspect
-numpy==1.26.4
-    # via
-    #   langchain
-    #   langchain-community
-openai==1.20.0
-    # via langchain-openai
-orjson==3.10.1
-    # via
-    #   duckduckgo-search
-    #   langsmith
-packaging==23.2
-    # via
-    #   langchain-core
-    #   marshmallow
-pycparser==2.22
-    # via cffi
 pydantic==2.6.1
-    # via
-    #   langchain
-    #   langchain-core
-    #   langsmith
-    #   openai
-    #   runloop
+    # via runloop
 pydantic-core==2.16.2
     # via
     #   pydantic
     #   runloop
-python-dotenv==1.0.1
-    # via -r requirements.in
-pyyaml==6.0.1
-    # via
-    #   langchain
-    #   langchain-community
-    #   langchain-core
-regex==2024.4.16
-    # via tiktoken
-requests==2.31.0
-    # via
-    #   -r requirements.in
-    #   langchain
-    #   langchain-community
-    #   langsmith
-    #   tiktoken
 runloop==0.0.19
     # via -r requirements.in
-sniffio==1.3.1
-    # via
-    #   anyio
-    #   httpx
-    #   openai
-soupsieve==2.5
-    # via beautifulsoup4
-sqlalchemy==2.0.29
-    # via
-    #   langchain
-    #   langchain-community
-tenacity==8.2.3
-    # via
-    #   langchain
-    #   langchain-community
-    #   langchain-core
-tiktoken==0.6.0
-    # via langchain-openai
-tqdm==4.66.2
-    # via openai
 typing-extensions==4.11.0
     # via
-    #   openai
     #   pydantic
     #   pydantic-core
-    #   sqlalchemy
-    #   typing-inspect
-typing-inspect==0.9.0
-    # via dataclasses-json
-urllib3==2.2.1
-    # via requests
-yarl==1.9.4
-    # via aiohttp
