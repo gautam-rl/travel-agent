@@ -5,7 +5,7 @@ import runloop
 
 @runloop.function
 def hello(name: str) -> str:
-    return f"Hello {name}!"
+    return f"Hello {name}!!!"
 
 
 @runloop.latch
