@@ -1,9 +1,9 @@
-#beautifulsoup4
-#duckduckgo-search
-#langchain
-#langchain-community
-#langchain-openai
-#loguru
-#python-dotenv
-#requests
+beautifulsoup4
+duckduckgo-search
+langchain
+langchain-community
+langchain-openai
+loguru
+python-dotenv
+requests
 runloop
